@@ -11,7 +11,18 @@ plugins {
     id 'nebula.netflixoss' version '3.4.0'
     id 'me.champeau.gradle.jmh' version '0.3.1'
     id 'net.saliman.cobertura' version '2.2.8'
+    id 'jacoco'
 }
+
+jacocoTestReport{
+	reports{
+		html.enabled = true;
+	}	
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+jacocoTestCoverageVerification.dependsOn jacocoTestReport
 
 ext {
     githubProjectName = rootProject.name
@@ -23,13 +34,14 @@ allprojects {
     }
 
     apply plugin: 'net.saliman.cobertura'
+    apply plugin: 'jacoco'
 }
 
 subprojects {
     apply plugin: 'nebula.netflixoss'
     apply plugin: 'java'
     apply plugin: 'nebula.provided-base'
-	apply plugin: 'nebula.compile-api'
+    apply plugin: 'nebula.compile-api'
 	
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
